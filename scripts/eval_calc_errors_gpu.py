@@ -82,7 +82,8 @@ p = {
         "{eval_path}", "{result_name}", "{error_sign}", "errors_{scene_id:06d}.json"
     ),
     "num_workers": config.num_workers,  # Number of parallel workers for the calculation of errors.
-    "eval_mode": "localization",  # Options: 'localization', 'detection'.
+    "eval_mode": "detection",  # Options: 'localization', 'detection'.
+    "max_num_estimates_per_image": 100,
 }
 ################################################################################
 
@@ -398,10 +399,12 @@ for result_filename in p["result_filenames"]:
                         "obj_id": obj_id,
                         "est_id": est_id,
                         "score": score,
-                        "gt_visib_fract": gt_visib_fract,
+                        # "gt_visib_fract": gt_visib_fract,
+                        "gt_visib_fracts": {},
                         "errors": {},
                     }
                 scene_errs[key_name]["errors"][gt_id] = [errors[i]]
+                scene_errs[key_name]["gt_visib_fracts"][gt_id] = [gt_visib_fract]
 
         scene_errs = [v for k, v in scene_errs.items()]
         del est_per_object
